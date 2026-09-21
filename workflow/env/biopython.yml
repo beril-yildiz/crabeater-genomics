@@ -1,0 +1,9 @@
+# mamba env create -f biophython.yml
+name: biopython
+channels:
+ - conda-forge
+ - bioconda
+ - defaults
+dependencies:
+  - python=3.11.5
+  - biopython>=1.8

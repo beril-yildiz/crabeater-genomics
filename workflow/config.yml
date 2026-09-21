@@ -1,0 +1,9 @@
+# local paths to stored sif container files
+sif_popgen: '$CDATA/apptainer_local/popgen_suite_v0.2.sif'
+sif_qc: '$CDATA/apptainer_local/qc_suite_v0.3.sif'
+sif_geno: '$CDATA/apptainer_local/genotyping_suite_v0.4.sif'
+singularity_bind_paths: '$(pwd),$CDATA'
+cactus_sif: '$CDATA/apptainer_local/cactus_v2.8.1-gpu.sif'
+cactus_other_sif: '$CDATA/apptainer_local/cactus_v2.9.3.sif'
+sif_smcpp: '$CDATA/apptainer_local/smcpp_latest.sif'
+cactus_cores: "24"

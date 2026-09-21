@@ -1,0 +1,46 @@
+import os
+from copy import deepcopy
+import numpy as np
+import pandas as pd
+
+configfile: "workflow/config.yml"
+
+code_dir = os.getcwd()
+base_dir = code_dir + "/.."
+
+rule all:
+    params:
+      wd = code_dir,
+      base_dir = base_dir
+    message:
+      """
+      {params.wd} is the working directory,
+      {params.base_dir} is the base directory
+      """
+
+c_popgen = config[ 'sif_popgen' ]
+c_geno = config[ 'sif_geno' ]
+c_qc = config[ 'sif_qc' ]
+c_cactus = config[ 'cactus_sif' ]
+c_cactus_other = config[ 'cactus_other_sif' ]
+c_smc = config[ 'sif_smcpp' ]
+
+REF_GENOME = "lobcar" # use lobcar for crabeater seal, hydlep for leopard seal, mirleo for southern elephant seal, and lepwed for Weddell seal
+
+#read in the sequencing meta-data
+seq_file_data = = pd.read_table('../data/file_info_{ref}.txt')
+
+SAMPLES = list(set(seq_file_data['sample_id'].values ))
+SAMPLES_smcpp = open("../results/{ref}/smcpp/sample_list_smcpp.txt").read().strip() 
+CHROMS = [l.strip() for l in open("../results/{ref}/smcpp/{ref}_chromlist.txt")]
+
+# get a set of all entries of a certain type (eg files)
+# from the file info table given a sample_id
+def gather_sample_entries(wildcards, what):
+    return( seq_file_data[what][ seq_file_data["sample_id"] == wildcards.sample ].values )
+def gather_seq_center_id(wildcards):
+    return( seq_file_data["seq_center_id"][seq_file_data["sample_id"] == wildcards.sample].values )
+
+include: "rules/genotyping.smk"
+include: "rules/downstream_analyses.smk"
+include: "rules/genome_assembly.smk"

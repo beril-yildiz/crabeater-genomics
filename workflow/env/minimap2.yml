@@ -1,0 +1,8 @@
+# mamba env create -f minimap2.yml
+name: minimap2
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - minimap2
